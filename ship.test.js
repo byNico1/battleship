@@ -16,6 +16,15 @@ describe("ship factory function has needed propertys", () => {
   });
 });
 
+describe("if the ship is larger than 10 or less than 1 it should return false", () => {
+  expect(() => {
+    Ship("Player one", 11);
+  }).toThrow(Error);
+  expect(() => {
+    Ship("Player one", 0);
+  }).toThrow(Error);
+});
+
 describe("hit function increases hits", () => {
   const ShipObject = Ship();
 
