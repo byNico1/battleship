@@ -1,6 +1,8 @@
 import { gameBoard } from "./gameBoard";
 import { Ship } from "./ship";
 
+import { describe, expect, test } from "vitest";
+
 describe("gameBoard factory should exist", () => {
   const gameBoardInstance = gameBoard();
 
@@ -98,5 +100,7 @@ describe("gameboard should know if all ships are sunk", () => {
   gameBoardInstance.receiveAttack(0, 0);
   gameBoardInstance.receiveAttack(1, 0);
 
-  expect(gameBoardInstance.areShipsSunk()).toBeTruthy();
+  test("it should know if all ships are sunk", () => {
+    expect(gameBoardInstance.areShipsSunk()).toBeTruthy();
+  });
 });

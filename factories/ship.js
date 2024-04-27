@@ -10,6 +10,10 @@ export const Ship = (name = "", length = 1) => {
       sunk: false,
       hit() {
         this.timesHitted++;
+
+        if (this.isSunk() === true) {
+          this.sunk = true;
+        }
       },
       isSunk() {
         return this.timesHitted === this.length;

@@ -1,4 +1,5 @@
 import { player } from "./player";
+import { describe, expect, test } from "vitest";
 
 describe("player should exist", () => {
   test("player function should be defined", () => {

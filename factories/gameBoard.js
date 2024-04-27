@@ -15,7 +15,7 @@ export const gameBoard = () => {
     }
 
     for (let i = 1; i <= ship.length; i++) {
-      if (board[x][y - 1 + i] === true) {
+      if (board[x][y - 1 + i] === true || board[x][y - 1 + i]) {
         return false;
       }
     }
@@ -31,7 +31,7 @@ export const gameBoard = () => {
 
   function receiveAttack(x, y) {
     if (board[x][y] && board[x][y].hittedSpot === false) {
-      board[x][y].ship.timesHitted++;
+      board[x][y].ship.hit();
       board[x][y].hittedSpot = true;
       if (board[x][y].ship.isSunk() === true) {
         totalShips -= 1;

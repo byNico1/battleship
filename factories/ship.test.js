@@ -1,4 +1,5 @@
 import { Ship } from "./ship";
+import { describe, expect, test } from "vitest";
 
 describe("ship factory function has needed propertys", () => {
   const ShipObject = Ship();
@@ -16,7 +17,7 @@ describe("ship factory function has needed propertys", () => {
   });
 });
 
-describe("if the ship is larger than 10 or less than 1 it should return false", () => {
+test("if the ship is larger than 10 or less than 1 it should return false", () => {
   expect(() => {
     Ship("Player one", 11);
   }).toThrow(Error);
