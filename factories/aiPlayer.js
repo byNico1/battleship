@@ -1,39 +1,53 @@
 import { player } from "./player";
 import { Ship } from "./ship";
-import { realPlayer } from "./game";
+import { ships } from "../src/utils/ships";
+import { deepCopy } from "../src/utils/helperFuncs";
+
+const shipsToPlace = deepCopy(ships);
 
 let aiPlayer = player();
 
 function makeShipCoordinates() {
   const x = Math.floor(Math.random() * 10);
   const y = Math.floor(Math.random() * 10);
-  const length = Math.floor(Math.random() * 9) + 1;
 
-  return [x, y, length];
+  let ship = shipsToPlace.filter((s) => s.placed === false)[0];
+  if (!ship) return [x, y];
+
+  return [x, y, ship];
 }
 
 function makeAiShip(number) {
-  const [x, y, length] = makeShipCoordinates();
+  const [x, y, ship] = makeShipCoordinates();
+  const isHorizontal = Math.random() < 0.5;
 
   if (
-    aiPlayer.gameBoard.placeShip(x, y, Ship(`ai ship ${number}`, length)) ===
-    false
+    aiPlayer.gameBoard.placeShip(
+      x,
+      y,
+      Ship(`ai ship ${number}`, ship.size),
+      isHorizontal
+    ) === false
   ) {
     makeAiShip(number);
     return;
   }
 
-  aiPlayer.gameBoard.placeShip(x, y, Ship(`ai ship ${number}`, length));
+  shipsToPlace.map((s) => {
+    if (ship.name === s.name) {
+      s.placed = true;
+    }
+  });
 }
-function aiAttack() {
+function aiAttack(player) {
   const [x, y] = makeShipCoordinates();
 
-  if (realPlayer.gameBoard.board[x][y].hittedSpot === true) {
-    aiAttack();
+  if (player.gameBoard.board[x][y].hittedSpot) {
+    aiAttack(player);
     return;
   }
 
-  realPlayer.gameBoard.receiveAttack(x, y);
+  player.gameBoard.receiveAttack(x, y);
 }
 
 for (let i = 1; i <= 5; i++) {

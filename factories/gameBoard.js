@@ -3,28 +3,47 @@ export const gameBoard = () => {
   let totalShips = 0;
   const missedAttacks = [];
 
-  function placeShip(x, y, ship) {
+  function placeShip(x, y, ship, isHorizontal) {
     if (
       board[x] === undefined ||
       board[x][y] === undefined ||
-      board[x][y] === true ||
-      board[x].length < ship.length ||
-      board[x][y - 1 + ship.length] === undefined
+      board[x][y] === true
     ) {
       return false;
     }
 
-    for (let i = 1; i <= ship.length; i++) {
-      if (board[x][y - 1 + i] === true || board[x][y - 1 + i]) {
+    if (isHorizontal) {
+      if (board[x][y - 1 + ship.length] === undefined) {
         return false;
+      }
+
+      for (let cell = 1; cell <= ship.length; cell++) {
+        if (board[x][y - 1 + cell] === true || board[x][y - 1 + cell]) {
+          return false;
+        }
+      }
+
+      for (let i = 1; i <= ship.length; i++) {
+        board[x][y - 1 + i] = { ship, hittedSpot: false };
+      }
+    } else {
+      for (let cell = 1; cell <= ship.length; cell++) {
+        if (
+          board[x - 1 + cell] === undefined ||
+          board[x - 1 + cell][y] === undefined ||
+          board[x - 1 + cell][y] === true
+        ) {
+          return false;
+        }
+      }
+
+      for (let i = 1; i <= ship.length; i++) {
+        board[x - 1 + i][y] = { ship, hittedSpot: false };
       }
     }
 
-    for (let i = 1; i <= ship.length; i++) {
-      board[x][y - 1 + i] = { ship, hittedSpot: false };
-    }
-
     totalShips += 1;
+    console.log(totalShips);
 
     return true;
   }
