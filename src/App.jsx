@@ -1,16 +1,17 @@
-// import { useState } from "react";
 import "./App.css";
 import { useState } from "react";
 
 import GameBoard from "./components/GameBoard";
 import GameOver from "./components/GameOver";
 
-import { realPlayer, restartRealPlayer } from "../factories/game";
-import { aiPlayer, restartAiPlayer } from "../factories/aiPlayer";
+import { realPlayer } from "./utils/playerInstance";
+import { aiPlayer } from "../factories/aiPlayer";
+import PlaceShips from "./components/PlaceShip/PlaceShips";
 
 function App() {
+  const [shipSetted, setShipSetted] = useState([]);
   const [aiAttackedState, setAiAttackedState] = useState(false);
-  const [restartingGame, setRestartingGame] = useState(false);
+
   const [gameOver, setGameOver] = useState({
     players: [realPlayer, aiPlayer],
     winner: "",
@@ -18,42 +19,45 @@ function App() {
   });
 
   const [turn, setTurn] = useState(true);
-
-  function restartGame() {
-    setGameOver({ ...gameOver, winner: "", state: false });
-    setTurn(true);
-    restartAiPlayer();
-    restartRealPlayer();
-    setRestartingGame(true);
-  }
+  const [startGame, setStartGame] = useState(false);
 
   return (
     <>
-      <section className="flex gap-10">
-        <GameBoard
-          turn={turn}
-          setTurn={setTurn}
-          player={aiPlayer}
-          gameOver={gameOver}
-          setGameOver={setGameOver}
-          restartingGame={restartingGame}
-          setRestartingGame={setRestartingGame}
-        />
+      <h1 className="mb-5">Battleship</h1>
 
-        <GameBoard
-          gameOver={gameOver}
-          setGameOver={setGameOver}
-          turn={turn}
-          setTurn={setTurn}
-          aiAttackedState={aiAttackedState}
-          setAiAttackedState={setAiAttackedState}
-          player={realPlayer}
-          restartingGame={restartingGame}
-          setRestartingGame={setRestartingGame}
+      {!startGame && (
+        <PlaceShips
+          shipSetted={shipSetted}
+          setShipSetted={setShipSetted}
+          setStartGame={setStartGame}
         />
-      </section>
+      )}
 
-      <GameOver gameOver={gameOver} restartGame={restartGame} />
+      {startGame && (
+        <section className="flex gap-10">
+          <GameBoard
+            turn={turn}
+            setTurn={setTurn}
+            player={aiPlayer}
+            gameOver={gameOver}
+            setGameOver={setGameOver}
+          />
+
+          <GameBoard
+            gameOver={gameOver}
+            setGameOver={setGameOver}
+            turn={turn}
+            setTurn={setTurn}
+            aiAttackedState={aiAttackedState}
+            setAiAttackedState={setAiAttackedState}
+            player={realPlayer}
+            shipSetted={shipSetted}
+            setShipSetted={setShipSetted}
+          />
+        </section>
+      )}
+
+      <GameOver gameOver={gameOver} />
     </>
   );
 }

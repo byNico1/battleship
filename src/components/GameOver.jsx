@@ -1,9 +1,13 @@
-const GameOver = ({ gameOver, restartGame }) => {
+const GameOver = ({ gameOver }) => {
+  function restartGame() {
+    window.location.reload(true);
+  }
+
   return (
     <section
       className={`${
         gameOver.state ? "block" : "hidden"
-      } absolute inset-0 grid place-items-center bg-black`}
+      } fixed inset-0 grid place-items-center bg-black`}
     >
       <div>
         <h2 className="mb-5 text-2xl font-bold">Game Over</h2>

@@ -12,12 +12,10 @@ const GameBoard = ({
   aiAttackedState,
   setGameOver,
   gameOver,
-  restartingGame,
-  setRestartingGame,
 }) => {
   useEffect(() => {
     if (turn === false && player.name !== "PC") {
-      aiAttack();
+      aiAttack(player);
       setAiAttackedState(true);
 
       if (player.gameBoard.areShipsSunk()) {
@@ -51,8 +49,6 @@ const GameBoard = ({
                 coordinates={[i, j]}
                 setGameOver={setGameOver}
                 gameOver={gameOver}
-                restartingGame={restartingGame}
-                setRestartingGame={setRestartingGame}
               />
             ))}
           </div>
