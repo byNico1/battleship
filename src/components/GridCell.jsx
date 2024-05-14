@@ -9,8 +9,6 @@ const GridCell = ({
   setAiAttackedState,
   setGameOver,
   gameOver,
-  restartingGame,
-  setRestartingGame,
 }) => {
   const [hitShipState, setHitShipState] = useState(false);
   const [hitMissState, setHitMissState] = useState(false);
@@ -18,24 +16,20 @@ const GridCell = ({
   const [i, j] = coordinates;
 
   useEffect(() => {
-    if (!player.gameBoard.board[i][j].hittedSpot) {
-      setHitMissState(false);
-      setHitShipState(false);
-    }
-  }, [restartingGame]);
-
-  useEffect(() => {
     if (player.name !== "PC") {
       if (player.gameBoard.board[i][j].hittedSpot === true) {
-        setHitMissState(true);
+        if (player.gameBoard.board[i][j].ship) {
+          setHitShipState(true);
+        } else {
+          setHitMissState(true);
+        }
+
         setAiAttackedState(false);
       }
     }
   }, [aiAttackedState]);
 
   const handleGridClick = (x, y) => {
-    if (restartingGame) setRestartingGame(false);
-
     if (turn && player.name === "PC") {
       if (player.gameBoard.board[x][y].hittedSpot === true) {
         return;
@@ -48,6 +42,8 @@ const GridCell = ({
         player.gameBoard.board[x][y].ship
       ) {
         setHitShipState(true);
+      } else {
+        setHitMissState(true);
       }
 
       if (player.gameBoard.areShipsSunk()) {
@@ -60,7 +56,6 @@ const GridCell = ({
         return;
       }
 
-      setHitMissState(true);
       setTurn((val) => !val);
     }
   };
@@ -79,7 +74,8 @@ const GridCell = ({
           : "bg-white"
       }
       ${gameOver.state ? "hover:bg-black" : ""}
-      ${hitShipState || hitMissState ? "!bg-red-500" : ""}
+      ${hitShipState ? "!bg-orange-500 m-2" : ""}
+      ${hitMissState ? "!bg-red-500" : ""}
       `}
       onClick={() => !gameOver.state && handleGridClick(i, j)}
     ></div>
