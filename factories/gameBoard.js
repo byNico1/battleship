@@ -31,7 +31,8 @@ export const gameBoard = () => {
         if (
           board[x - 1 + cell] === undefined ||
           board[x - 1 + cell][y] === undefined ||
-          board[x - 1 + cell][y] === true
+          board[x - 1 + cell][y] === true ||
+          board[x - 1 + cell][y]
         ) {
           return false;
         }
